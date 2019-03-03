@@ -22,6 +22,9 @@ public class EventsFragment extends Fragment {
     public   static FirebaseDatabase mfirebaseDatabase;
     private DatabaseReference mdatabaseRef;
 
+    static boolean calledAlready_offlinemode = false;
+
+
 
     @Nullable
     @Override
@@ -33,7 +36,11 @@ public class EventsFragment extends Fragment {
         mrecycler.setHasFixedSize(true);
         mrecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-
+        if (!calledAlready_offlinemode)
+        {
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            calledAlready_offlinemode = true;
+        }
 
         mfirebaseDatabase = FirebaseDatabase.getInstance();
         mdatabaseRef= mfirebaseDatabase.getReference("Data");
@@ -41,7 +48,7 @@ public class EventsFragment extends Fragment {
 
 
 
-        FirebaseRecyclerAdapter<GetData_From_FireBase,Viewholder_Firebase_Events> firebaseRecyclerAdapter=new FirebaseRecyclerAdapter<GetData_From_FireBase, Viewholder_Firebase_Events>(GetData_From_FireBase.class,
+        FirebaseRecyclerAdapter<GetData_From_FireBase,Viewholder_Firebase_Events> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<GetData_From_FireBase, Viewholder_Firebase_Events>(GetData_From_FireBase.class,
                 R.layout.eventsrecyclerlayout, Viewholder_Firebase_Events.class,mdatabaseRef) {
             @Override
             protected void populateViewHolder(Viewholder_Firebase_Events viewHolder, GetData_From_FireBase model, int position) {
@@ -50,7 +57,7 @@ public class EventsFragment extends Fragment {
 
             @Override
             public Viewholder_Firebase_Events onCreateViewHolder(ViewGroup parent, int viewType) {
-                Viewholder_Firebase_Events h=super.onCreateViewHolder(parent,viewType);
+                Viewholder_Firebase_Events h = super.onCreateViewHolder(parent,viewType);
 
                 return h;
             }
